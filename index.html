@@ -28,7 +28,7 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 <script>
     $(document).ready(function(){
-        $.get('https://data.cityofchicago.org/resource/xzkq-xp2w.json?$select=department,count(department)&$group=department', function(data) {
+        $.get('https://data.cityofchicago.org/resource/xzkq-xp2w.json?$select=department,count(department)&$group=department&$order=department', function(data) {
           console.log(data);
               $.each(data, function(i,v) {
                 var clone = $("#template").clone();
@@ -38,25 +38,21 @@
                 .text(v.count_department);
                 clone.append(span);
                 clone.attr("id","");
-                clone.attr("data-department",v.department);
+                clone.attr("data-department",encodeURIComponent(v.department));
 
                 $(".list-group").append(clone);
 
               });
         });
 
-        
+
         $("body").on("click", ".list-group-item",function( ) {
-            $.get("https://data.cityofchicago.org/resource/xzkq-xp2w.json?department=" +  $(this).attr("data-department"), function(data) {
-                console.log(data);
-                    // <clear whatever container holds the cards>
-                    // <loop through response data, clone simple card and append to container>
-                });
-
+        $.get("https://data.cityofchicago.org/resource/xzkq-xp2w.json?department=" +  $(this).attr("data-department"), function(data) {
+            console.log(data);
+                // <clear whatever container holds the cards>
+                // <loop through response data, clone simple card and append to container>
+            });
         });
-
-
-
     });
 
 </script>
